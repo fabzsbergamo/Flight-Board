@@ -10,7 +10,7 @@
         <div class="form-floating">
           <select v-model="form.flight" id="floatingSelectGrid" class="form-select">
             <option disabled selected value="">Choose an option</option>
-            <option v-for="option in currentDepatures.map(flightOption)" :key="option.id" :value="option.id">
+            <option v-for="option in currentDepatures.map(formatFlightOption)" :key="option.id" :value="option.id">
               {{ option.label}}
             </option>
           </select>
@@ -19,12 +19,16 @@
       </div>
       <div class="col-md">
         <div class="form-floating">
-          <input v-model="form.status" list="browsers" name="browser" id="floatingInputGrid" type="text" class="form-control" placeholder="">
-
-            <datalist id="browsers">
+            <select v-model="form.status"  class="form-select" >
               <option v-for="status in statuses" :key="status" >{{status}}</option>
-            </datalist>
-          <label for="floatingInputGrid" >Update Status</label>
+            </select>
+          <label for="floatingInputGrid" >Status</label>
+        </div>
+      </div>
+      <div class="col-md">
+        <div class="form-floating">
+          <input v-model="form.statusText" name="browser" id="floatingInputGrid" type="text" class="form-control" placeholder="">
+          <label for="floatingInputGrid" >Reason</label>
         </div>
       </div>
       <div class="col-md">
@@ -62,25 +66,25 @@
   <div class="display">
     <table id="results" class="table table-dark table-hover">
       <thead>
-        <tr class="headers">
-          <th>Departure time</th>
-          <th>City Name</th>
-          <th>Code</th>
-          <th>Airline</th>
-          <th>Gates</th>
-          <th>Status</th>
+        <tr>
+          <th class="headers">Departure time</th>
+          <th class="headers">City Name</th>
+          <th class="headers">Code</th>
+          <th class="headers">Airline</th>
+          <th class="headers">Gates</th>
+          <th class="headers">Status</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="departure in filtered()" :key="departure.id">
+        <tr v-for="departure in filtered()" :key="departure.id" class="flightbox">
           <td>{{ departure.departureTime }}</td>
-          <td class="gold">{{ departure.arrivalAirport }}</td>
-          <td>{{ departure.code }}</td>
-          <td>{{ departure.airline }}</td>
-          <td class="gold">{{ departure.gates }}</td>
-          <td>
-            <span :class="colors[departure.status]">
-              {{ `${departure.statusText}` }}
+          <td class="gold" >{{ departure.arrivalAirport }} <span class="arrivalcountry">- {{ departure.countryName }}</span></td>
+          <td class="">{{ departure.code }}</td>
+          <td class="">{{ departure.airline }}</td>
+          <td class="gold ">{{ departure.gates }}</td>
+          <td class="">
+            <span :class="colors[departure.status]" class="status">
+              {{ `${departure.statusText}`  }}
             </span>
           </td>
         </tr>
@@ -127,8 +131,8 @@ export default {
       this.airlineForm.activeFilter = 'NONE';
     },
     
-    flightOption (departure: Departure) {
-      const label = `${departure.departureTime} ${departure.cityName} to ${departure.arrivalAirport} : ${departure.statusText}`
+    formatFlightOption (departure: Departure) {
+      const label = `${departure.departureTime} ${departure.cityName} to ${departure.arrivalAirport} : ${departure.status}`
       return {
         id: departure.id,
         label: label
@@ -138,7 +142,7 @@ export default {
       console.log("bla bla bla ", this.form)
       const updated = this.currentDepatures.map((departure) => {
         if (Number(this.form.flight) === departure.id) {
-          return {...departure, statusText: this.form.status}
+          return {...departure, statusText: this.form.statusText, status: this.form.status}
         }
 
         return departure
@@ -157,7 +161,8 @@ export default {
       },
       form: {
         flight: '',
-        status: ''
+        status: '',
+        statusText: '',
       },
       statuses: [
         "WAIT",
@@ -170,18 +175,18 @@ export default {
       ] as Status[],
       
       colors: {
-        GO_TO_GATE: 'go-to-gate',
-        GATE_OPEN: 'gate-open',
-        BOARDING: 'go-to-gate',
-        FLIGHT_CLOSING: 'fligh-closing',
-        FINAL_CALL: 'final-call',
-        DEPARTED: 'go-to-gate',
-        WAIT: 'go-to-gate',
-        DEPARTING: 'go-to-gate',
-        UNKNOWN: 'go-to-gate',
-        DIVERTED: 'go-to-gate',
-        DELAYED: 'go-to-gate',
-        CANCELLED: 'cancelled',
+        GO_TO_GATE: 'status--go-to-gate',
+        GATE_OPEN: 'status--gate-open',
+        BOARDING: 'status--go-to-gate',
+        FLIGHT_CLOSING: 'status--fligh-closing',
+        FINAL_CALL: 'status--final-call',
+        DEPARTED: 'status--go-to-gate',
+        WAIT: 'status--go-to-gate',
+        DEPARTING: 'status--go-to-gate',
+        UNKNOWN: 'status--go-to-gate',
+        DIVERTED: 'status--go-to-gate',
+        DELAYED: 'status--go-to-gate',
+        CANCELLED: 'status--cancelled',
       },
       currentDepatures: [...this.departures],
       flightOptions: []
@@ -206,29 +211,41 @@ export default {
   padding: 2%;
   text-align: center;
 }
-
-.go-to-gate {
+.arrivalcountry {
+  color: burlywood;
+}
+.status {
+  padding: 6px 10px 6px 6px;
+  border-left: 1rem solid white;
   background-color: white;
   color: black;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  white-space: nowrap;
 }
-.cancelled{
-  background-color: white;
-  color: red;
+.status--go-to-gate {
+  border-left-color: green;
 }
-.gate-open {
-  background-color: white;
-  color: green;
+.status--cancelled{
+  border-left-color: red;
 }
-.fligh-closing{
-  background-color: white;
-  color: orange;
+.status--gate-open {
+  border-left-color: rgb(59, 176, 59);
 }
-.final-call{
-  background-color: white;
-  color: rgb(252, 208, 127);
+.status--fligh-closing{
+  border-left-color: rgb(255, 208, 0);
+}
+.status--final-call{
+  border-left-color: rgb(250, 126, 2);
 }
 .headers {
-  background-color: blue;
+  background-color: rgb(195, 195, 202);
+  color: black;
+  /* text-align: left; */
+}
+
+.flightbox {
+  border-color: white;
 }
 
 .gold {
