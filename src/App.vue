@@ -1,6 +1,8 @@
 <template>
   <div>
     <Departures :departures="items" />
+    <div v-if="isLoading">Loading...</div>
+    <div v-if="errorMessage">{{ errorMessage }}</div>
   </div>
 </template>
 
@@ -16,7 +18,9 @@ export default {
 
   data() {
     return {
-      items: []
+      items: [],
+      isLoading: false,
+      errorMessage: ''
     }
   },
   mounted() {
@@ -24,20 +28,25 @@ export default {
   },
   methods: {
     fetchData() {
+      this.isLoading = true;
       fetch<AllDepartures>('https://6315ae3e5b85ba9b11e4cb85.mockapi.io/departures/Flightdata')
-        .then((response) => response.json())
         .then((response) => {
-          // [].map
-          // [].filter
-          // [].reduce
-          // [].concat
+          if (!response.ok) {
+            throw new Error('Failed to fetch data');
+          }
+          return response.json();
+        })
+        .then((response) => {
           this.items = response.allDepartures.map((data: DepartureData, index: number) => {
             return formatData(data, index)
-          })
+          });
+          this.isLoading = false;
         })
         .catch((error) => {
-          console.log('errror', error)
-        })
+          console.error('Error fetching data:', error);
+          this.errorMessage = 'Failed to fetch data. Please try again later.';
+          this.isLoading = false;
+        });
     }
   }
 }
@@ -48,6 +57,7 @@ function formatData(data: DepartureData, index: number): Departure {
     id: index,
     departureTime: formatDate(data.actualDepartureDateTime),
     cityName: data.departureAirport.cityName,
+    countryName: data.arrivalAirport.countryName,
     code: data.arrivalAirport.code,
     airline: data.airline.name,
     gates: data.departureGate?.number,
