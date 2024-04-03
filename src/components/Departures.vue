@@ -225,18 +225,23 @@ export default {
 }
 .status--go-to-gate {
   border-left-color: green;
+  color: green;
 }
 .status--cancelled{
   border-left-color: red;
+  color: red;
 }
 .status--gate-open {
   border-left-color: rgb(59, 176, 59);
+  color: rgb(59, 176, 59);
 }
 .status--fligh-closing{
   border-left-color: rgb(255, 208, 0);
+  color: rgb(255, 208, 0);
 }
 .status--final-call{
   border-left-color: rgb(250, 126, 2);
+  color: rgb(250, 126, 2);
 }
 .headers {
   background-color: rgb(195, 195, 202);

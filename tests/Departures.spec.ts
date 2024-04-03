@@ -18,7 +18,7 @@ describe('Departures', () => {
       code: 'MUN',
       airline: 'EasyJet',
       gates: '14',
-      status: 'Gate Open',
+      status: 'GATE_OPEN',
       statusText: 'GATE_OPEN',
       
     }
@@ -33,7 +33,6 @@ describe('Departures', () => {
     expect(tds[3].text()).toContain(departure.airline)
     expect(tds[4].text()).toContain(departure.gates)
     expect(tds[5].text()).toContain(departure.status)
-    // expect(tds[6].text()).toContain(departure.statusText)
+    expect(tds[5].text()).toContain(departure.statusText)
   })
 })
-// is the test covering the behavior that i care about

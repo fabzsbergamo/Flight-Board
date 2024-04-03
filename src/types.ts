@@ -44,7 +44,6 @@ type DepartureGate = {
 }
 
 export type Departure = {
-[x: string]: any
   id: string
   departureTime: string
   cityName: string
