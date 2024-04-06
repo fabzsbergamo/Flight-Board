@@ -1,20 +1,10 @@
 {
-  "include": [
-    "env.d.ts",
-    "src/**/*",
-    "src/**/*.vue",
-    "tests/**/*",
-    "tests/**/*.vue",
-    "vite.config.*",
-  ],
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "tests/**/*", "tests/**/*.vue", "vite.config.*"],
   "compilerOptions": {
     "baseUrl": ".",
     "module": "ESNext",
     "target": "ESNext",
-    "lib": [
-      "DOM",
-      "ESNext"
-    ],
+    "lib": ["DOM", "ESNext"],
     "strict": true,
     "esModuleInterop": true,
     "jsx": "preserve",
@@ -25,20 +15,10 @@
     "strictNullChecks": true,
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
-    "types": [
-      "vite/client",
-      "jest",
-      "jsdom",
-      "node"
-    ],
+    "types": ["vite/client", "jest", "jsdom", "node"],
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     }
   },
-  "exclude": [
-    "dist",
-    "node_modules"
-  ]
+  "exclude": ["dist", "node_modules"]
 }

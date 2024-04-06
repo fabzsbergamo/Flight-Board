@@ -10,7 +10,6 @@
 import Departures from '@/components/Departures.vue'
 import { AllDepartures, Departure, DepartureData, Status } from './types'
 
-
 export default {
   components: {
     Departures
@@ -28,25 +27,25 @@ export default {
   },
   methods: {
     fetchData() {
-      this.isLoading = true;
+      this.isLoading = true
       fetch<AllDepartures>('https://6315ae3e5b85ba9b11e4cb85.mockapi.io/departures/Flightdata')
         .then((response) => {
           if (!response.ok) {
-            throw new Error('Failed to fetch data');
+            throw new Error('Failed to fetch data')
           }
-          return response.json();
+          return response.json()
         })
         .then((response) => {
           this.items = response.allDepartures.map((data: DepartureData, index: number) => {
             return formatData(data, index)
-          });
-          this.isLoading = false;
+          })
+          this.isLoading = false
         })
         .catch((error) => {
-          console.error('Error fetching data:', error);
-          this.errorMessage = 'Failed to fetch data. Please try again later.';
-          this.isLoading = false;
-        });
+          console.error('Error fetching data:', error)
+          this.errorMessage = 'Failed to fetch data. Please try again later.'
+          this.isLoading = false
+        })
     }
   }
 }

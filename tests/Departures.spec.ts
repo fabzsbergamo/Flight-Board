@@ -19,15 +19,14 @@ describe('Departures', () => {
       airline: 'EasyJet',
       gates: '14',
       status: 'GATE_OPEN',
-      statusText: 'GATE_OPEN',
-      
+      statusText: 'GATE_OPEN'
     }
     const wrapper = mount(Departures, { props: { departures: [departure] } })
     const row = wrapper.find('tbody > tr')
     // console.log(wrapper.html())
     const tds = row.findAll('td')
 
-    expect(tds[0].text()).toContain("00:48")
+    expect(tds[0].text()).toContain('00:48')
     expect(tds[1].text()).toContain(departure.arrivalAirport)
     expect(tds[2].text()).toContain(departure.code)
     expect(tds[3].text()).toContain(departure.airline)
