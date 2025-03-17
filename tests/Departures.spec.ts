@@ -34,4 +34,25 @@ describe('Departures', () => {
     expect(tds[5].text()).toContain(departure.status)
     expect(tds[5].text()).toContain(departure.statusText)
   })
+
+  it('gives you a list of flight departures', () => {
+    const departure = {
+      id: '2',
+      departureTime: 'Mon Feb 05 2024 00:48:42',
+      arrivalAirport: 'Paris',
+      code: 'MUN',
+      airline: 'EasyJet',
+      gates: '14',
+      status: 'GATE_OPEN',
+      statusText: 'GATE_OPEN'
+    }
+
+    const wrapper = mount(Departures, { props: { departures: [] } })
+    const form = wrapper.find('form > select')
+    const option = form.find('option')
+
+    expect(option.text()).toContain('00:48')
+    expect(option.text()).toContain(departure.status)
+    expect(option.text()).toContain(departure.statusText)
+  })
 })
